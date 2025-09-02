@@ -22,6 +22,7 @@ from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext as _
 
+from organizations import signals
 from organizations.backends.forms import UserRegistrationForm
 from organizations.backends.forms import org_registration_form
 from organizations.utils import create_organization
@@ -126,6 +127,7 @@ class BaseBackend:
             user = form.save()
             user.set_password(form.cleaned_data["password1"])
             user.save()
+            signals.invitation_accepted.send(sender=self, user=user)
             self.activate_organizations(user)
             user = authenticate(
                 username=form.cleaned_data["username"],
