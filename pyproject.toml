@@ -1,9 +1,10 @@
 [project]
-name = "django-organizations"
+name = "django-orgs"
+version = "2.5.0.2025"
 authors = [
-  { name="Ben Lopatin", email="ben@benlopatin.com" },
+  { name="Kr Sahas", email="krsahas.git@gmail.com" },
 ]
-description = "Group accounts for Django"
+description = "Reusable Django app for multi-tenant web applications and organizations management."
 readme = "README.rst"
 requires-python = ">=3.9"
 license = {text = "BSD License"}
@@ -26,11 +27,10 @@ dependencies = [
     "Django>=3.2",
     "django-extensions>=2.0.8",
 ]
-dynamic = ["version"]
 
 [project.urls]
-"Source" = "https://github.com/bennylope/django-organizations"
-"Issues" = "https://github.com/bennylope/django-organizations/issues"
+"Source" = "https://github.com/banaoinventory/django-orgs"
+"Issues" = "https://github.com/banaoinventory/django-orgs/issues"
 "Documentation" = "https://django-organizations.readthedocs.io/en/latest/"
 
 [project.optional-dependencies]
@@ -60,8 +60,8 @@ dev = [
 ]
 
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=69", "wheel", "build"]
+build-backend = "setuptools.build_meta"
 
 [tool.hatch.build]
 sources = ["src"]
@@ -86,3 +86,18 @@ known_first_party = ["organizations"]
 sections = ["FUTURE", "STDLIB", "DJANGO", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
 default_section = "THIRDPARTY"
 skip_glob = ["**/__init__.py", "*/__init__.py"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+packages = { find = { where = ["src"], include = ["organizations*"] } }
+include-package-data = true
+
+# Optional: ensure templates/static/locale/migrations land in wheels
+[tool.setuptools.package-data]
+organizations = [
+  "templates/**/*.html",
+  "static/**/*",
+  "locale/**/LC_MESSAGES/*.mo",
+  "locale/**/LC_MESSAGES/*.po",
+  "migrations/*.py"
+]
